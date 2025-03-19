@@ -76,6 +76,7 @@ func CreatePerson(c *gin.Context) {
 			},
 		})
 	}
+	//sending the sucess response
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data":   id,
