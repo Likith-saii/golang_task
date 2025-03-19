@@ -17,6 +17,7 @@ func CreatePerson(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Println("Invalid request body:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "request",
 				Error: err.Error(),
@@ -31,6 +32,7 @@ func CreatePerson(c *gin.Context) {
 		// Log the error and return an internal server error if the database connection fails
 		log.Println("Database connection failed:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "database",
 				Error: "Database connection failed",
@@ -44,6 +46,7 @@ func CreatePerson(c *gin.Context) {
 	if err != nil {
 		log.Println("Failed to start transaction:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "database",
 				Error: "Failed to start transaction",
@@ -55,6 +58,7 @@ func CreatePerson(c *gin.Context) {
 	if err != nil || id == 0 {
 		log.Println("Failed to perform database operation:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "database",
 				Error: "Failed to perform database operation",
@@ -65,6 +69,7 @@ func CreatePerson(c *gin.Context) {
 	if err := tx.Commit(); err != nil {
 		log.Println("Failed to commit transaction:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "database",
 				Error: "Failed to commit transaction",
@@ -72,7 +77,8 @@ func CreatePerson(c *gin.Context) {
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": id,
+		"status": "success",
+		"data":   id,
 	})
 
 }

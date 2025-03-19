@@ -20,6 +20,7 @@ func GetPersonInfo(c *gin.Context) {
 		// Log the error and return a bad request response if the ID is not a valid integer
 		log.Println("Invalid person ID:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "person_id",
 				Error: "Invalid person ID",
@@ -34,6 +35,7 @@ func GetPersonInfo(c *gin.Context) {
 		// Log the error and return an internal server error if the database connection fails
 		log.Println("Database connection failed:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "database",
 				Error: "Database connection failed",
@@ -50,6 +52,7 @@ func GetPersonInfo(c *gin.Context) {
 		// Log the error and return an internal server error if fetching data fails
 		log.Println("Error fetching person data:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
 			"data": models.ValidationError{
 				Field: "person",
 				Error: "Error fetching person data",
@@ -59,5 +62,8 @@ func GetPersonInfo(c *gin.Context) {
 	}
 
 	// Return the retrieved person details as a JSON response
-	c.JSON(http.StatusOK, person)
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": person,
+	})
 }
