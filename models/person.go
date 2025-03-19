@@ -12,7 +12,7 @@ type PersonResponse struct {
 
 type PersonRequest struct {
 	Name        string `json:"name" binding:"required,min=2,max=100"`
-	PhoneNumber string `json:"phone_number" binding:"required,len=12,regexp=^\\d{3}-\\d{3}-\\d{4}$"`
+	PhoneNumber string `json:"phone_number" binding:"required,len=12"`
 	City        string `json:"city" binding:"required"`
 	State       string `json:"state" binding:"required,len=2"`
 	Street1     string `json:"street1" binding:"required"`
